@@ -10,6 +10,44 @@ from src.core.llm import get_llm_client
 logger = logging.getLogger(__name__)
 
 
+@register_task("LLMTransformTask")
+class LLMTransformTask(PipelineTask):
+    """
+    Applies an LLM prompt to a single string input.
+    Used for 'Master Summaries' or 'Action Plans'.
+    """
+
+    def execute(
+        self, context: WorkflowContext, config: Dict[str, Any]
+    ) -> WorkflowContext:
+        input_key = config.get("input_key")
+        output_key = config.get("output_key")
+        prompt_file = config.get("prompt_file")
+        model_name = config.get("model", "default")
+
+        if not input_key or not output_key or not prompt_file:
+            raise ValueError("LLMTransformTask config missing required keys.")
+
+        # Load Data
+        input_text = context.require(input_key)
+
+        # Load Prompt
+        if not os.path.exists(prompt_file):
+            raise FileNotFoundError(f"Prompt file not found: {prompt_file}")
+        with open(prompt_file, encoding="utf-8") as f:
+            template = f.read()
+
+        # Execute
+        llm_client = get_llm_client(config)
+        final_prompt = template.format(content=input_text)
+
+        logger.info(f"Generating transformation for key '{input_key}'...")
+        result = llm_client.query(final_prompt, model=model_name)
+
+        context.set(output_key, result)
+        return context
+
+
 @register_task("BatchLLMTask")
 class BatchLLMTask(PipelineTask):
     """
