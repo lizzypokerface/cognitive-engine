@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "cognitive-engine"
+version = "0.1.0"
+description = ""
+authors = ["Lizzy Poker Face <165659964+lizzypokerface@users.noreply.github.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.10,<3.14"
+pre-commit = "^4.3.0"
+selenium = "^4.35.0"
+pandas = "^2.3.2"
+beautifulsoup4 = "^4.13.5"
+ollama = "^0.5.3"
+langchain-community = "^0.3.29"
+langchain-core = "^0.3.75"
+google-api-python-client = "^2.181.0"
+openai = "^1.107.0"
+youtube-transcript-api = "^1.2.2"
+pytest = "^9.0.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
