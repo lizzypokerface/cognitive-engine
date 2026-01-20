@@ -1,6 +1,10 @@
 import logging
+import os
 from abc import ABC, abstractmethod
 from typing import Dict, Any
+
+import openai
+from langchain_community.llms import Ollama
 
 logger = logging.getLogger(__name__)
 
@@ -12,45 +16,78 @@ class BaseLLMClient(ABC):
 
 
 class MockLLMClient(BaseLLMClient):
-    """
-    Simulates an LLM response for testing workflows without cost.
-    """
+    """Simulates response for testing."""
 
     def query(self, prompt: str, model: str = "default") -> str:
-        # Determine what kind of prompt it is to give a relevant mock response
-        if "summary" in prompt.lower() or "summarize" in prompt.lower():
-            return f"[[Mock Summary using {model}]]: The text discusses key concepts X, Y, and Z. It argues that..."
-        elif "action" in prompt.lower() or "strategy" in prompt.lower():
-            return f"[[Mock Action Plan using {model}]]:\n1. Do this.\n2. Do that.\n3. Profit."
-        else:
-            return (
-                f"[[Mock Response using {model}]]: Processed {len(prompt)} characters."
-            )
+        logger.info(f"[MockLLM] Processing prompt with model '{model}'...")
+        if "summar" in prompt.lower():
+            return f"[[Mock Summary ({model})]]: The text discusses key concepts X, Y, Z..."
+        return f"[[Mock Response ({model})]]: Action completed successfully."
 
 
 class ProductionLLMClient(BaseLLMClient):
     """
-    The real client. Currently disabled/placeholder until you add API keys.
+    The real client supporting Poe (via OpenAI protocol) and local Ollama.
     """
 
     def __init__(self, config: Dict[str, Any]):
         self.config = config
-        # Future: Initialize OpenAI/Poe client here
-        # self.api_key = config.get("api_keys", {}).get("poe_api")
+        self.provider = config.get("provider", "poe").lower()
+
+        # Setup Poe (via OpenAI SDK)
+        if self.provider == "poe":
+            api_key = os.getenv("POE_API_KEY")
+            if not api_key:
+                logger.warning("POE_API_KEY not found in environment variables.")
+
+            self.client = openai.OpenAI(
+                api_key=api_key, base_url="https://api.poe.com/v1"
+            )
+
+        # Setup Ollama (No Auth needed for local)
+        elif self.provider == "ollama":
+            # We don't need persistent client for LangChain Ollama, we instantiate per call
+            pass
 
     def query(self, prompt: str, model: str = "default") -> str:
-        raise NotImplementedError(
-            "Real API calls are not yet enabled. Use the Mock client."
+        try:
+            if self.provider == "poe":
+                return self._query_poe(prompt, model)
+            elif self.provider == "ollama":
+                return self._query_ollama(prompt, model)
+            else:
+                raise ValueError(f"Unknown provider: {self.provider}")
+        except Exception as e:
+            logger.error(f"LLM Query Failed ({self.provider}/{model}): {e}")
+            return f"[Error: {e}]"
+
+    def _query_poe(self, prompt: str, model: str) -> str:
+        # Default to a safe model if 'default' is passed
+        target_model = model if model != "default" else "Gemini-2.5-Flash"
+
+        logger.info(f"Querying Poe API with model: {target_model}")
+        response = self.client.chat.completions.create(
+            model=target_model,
+            messages=[{"role": "user", "content": prompt}],
+            temperature=0.0,  # Deterministic
         )
+        return response.choices[0].message.content.strip()
+
+    def _query_ollama(self, prompt: str, model: str) -> str:
+        target_model = model if model != "default" else "qwen2.5:14b"
+
+        logger.info(f"Querying Local Ollama with model: {target_model}")
+        llm = Ollama(model=target_model, temperature=0.0)
+        return llm.invoke(prompt)
 
 
 def get_llm_client(config: Dict[str, Any]) -> BaseLLMClient:
     """
-    Factory to return the correct client.
-    For now, we strictly return MockLLMClient to keep the testing free.
+    Factory: Returns Mock or Production client based on config.
     """
-    # In the future, you can toggle this via config.yaml:
-    # provider = config.get("llm_provider", "mock")
-    # if provider == "poe": return ProductionLLMClient(config)
+    # Check if 'mock' is explicitly requested in the step config
+    if config.get("provider") == "mock":
+        return MockLLMClient()
 
-    return MockLLMClient()
+    # Otherwise, check environment mode or default to Production
+    return ProductionLLMClient(config)

@@ -2,8 +2,11 @@ import argparse
 import logging
 import sys
 import os
-
+from dotenv import load_dotenv
 from src.core.engine import WorkflowEngine
+
+# Load environment variables from .env file
+load_dotenv()
 
 
 def setup_logging(debug: bool = False):
