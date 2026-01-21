@@ -71,7 +71,7 @@ class ProductionLLMClient(BaseLLMClient):
             messages=[{"role": "user", "content": prompt}],
             temperature=0.0,  # Deterministic
         )
-        return response.choices[0].message.content.strip()
+        return self._clean_llm_output(response.choices[0].message.content)
 
     def _query_ollama(self, prompt: str, model: str) -> str:
         target_model = model if model != "default" else "qwen2.5:14b"
@@ -79,6 +79,34 @@ class ProductionLLMClient(BaseLLMClient):
         logger.info(f"Querying Local Ollama with model: {target_model}")
         llm = Ollama(model=target_model, temperature=0.0)
         return llm.invoke(prompt)
+
+    def _clean_llm_output(self, text: str) -> str:
+        """
+        Removes meta-commentary, 'thinking' lines, and blockquotes from the LLM output.
+        Target patterns:
+        - "*Thinking...*"
+        - "> Blockquoted thought process"
+        """
+        if not text:
+            return ""
+
+        lines = text.splitlines()
+        cleaned_lines = []
+
+        for line in lines:
+            stripped = line.strip()
+
+            # Filter out blockquotes (standard CoT format for some models)
+            if stripped.startswith(">"):
+                continue
+
+            # Filter out italicized thinking markers (e.g. *Thinking...*)
+            if stripped.lower().startswith("*thinking"):
+                continue
+
+            cleaned_lines.append(line)
+
+        return "\n".join(cleaned_lines).strip()
 
 
 def get_llm_client(config: Dict[str, Any]) -> BaseLLMClient:
