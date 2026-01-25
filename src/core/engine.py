@@ -13,6 +13,7 @@ import src.tasks.transformers  # noqa: F401
 import src.tasks.aggregators  # noqa: F401
 import src.tasks.writers  # noqa: F401
 import src.tasks.splitters  # noqa: F401
+import src.tasks.audio  # noqa: F401
 
 logger = logging.getLogger(__name__)
 
