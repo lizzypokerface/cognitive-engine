@@ -1,5 +1,6 @@
 import os
 import logging
+import datetime
 from typing import Dict, Any
 
 from src.core.interfaces import PipelineTask
@@ -14,7 +15,6 @@ logger = logging.getLogger(__name__)
 class LLMTransformTask(PipelineTask):
     """
     Applies an LLM prompt to a single string input.
-    Used for 'Master Summaries' or 'Action Plans'.
     """
 
     def execute(
@@ -44,7 +44,19 @@ class LLMTransformTask(PipelineTask):
         logger.info(f"Generating transformation for key '{input_key}'...")
         result = llm_client.query(final_prompt, model=model_name)
 
-        context.set(output_key, result)
+        # Add Metadata (No Source field for single transform)
+        current_date = datetime.datetime.now().strftime("%d-%m-%Y")
+        metadata_section = (
+            f"## Metadata\n"
+            f"- **Date:** {current_date}\n"
+            f"- **Model:** {model_name}\n"
+            f"- **Prompt:** {prompt_file}\n\n"
+        )
+
+        # Combine
+        final_output = f"{metadata_section}## LLM Processed Content\n\n{result}"
+
+        context.set(output_key, final_output)
         return context
 
 
@@ -92,8 +104,10 @@ class BatchLLMTask(PipelineTask):
 
         os.makedirs(output_dir, exist_ok=True)
 
+        current_date = datetime.datetime.now().strftime("%d-%m-%Y")
+
         for item in inputs:
-            original_filename = item.get("filename", "unknown.txt")
+            original_filename = item.get("filename", "unknown")
             content = item.get("content", "")
 
             logger.info(f"Processing item: {original_filename}")
@@ -110,10 +124,20 @@ class BatchLLMTask(PipelineTask):
                 llm_output = f"[Error processing {original_filename}]"
 
             # C. Combine for Output
+            metadata_section = (
+                f"## Metadata\n"
+                f"- **Date:** {current_date}\n"
+                f"- **Source:** {original_filename}\n"
+                f"- **Model:** {model_name}\n"
+                f"- **Prompt:** {prompt_file}\n\n"
+            )
+
             if include_original:
-                processed_content = f"## LLM Processed Content\n\n{llm_output}\n\n---\n\n## Original Content\n\n{content}"
+                processed_content = f"{metadata_section}## LLM Processed Content\n\n{llm_output}\n\n---\n\n## Original Content\n\n{content}"
             else:
-                processed_content = f"## LLM Processed Content\n\n{llm_output}"
+                processed_content = (
+                    f"{metadata_section}## LLM Processed Content\n\n{llm_output}"
+                )
 
             # D. Save Intermediate File (optional)
             if save_intermediate:
