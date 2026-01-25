@@ -20,7 +20,16 @@ youtube-transcript-api = "^1.2.2"
 pytest = "^9.0.2"
 pyyaml = "^6.0.3"
 python-dotenv = "^1.2.1"
+openai-whisper = "^20250625"
+# Use 2.7.0+ which is stable and supports sm_120 via cu128
+torch = { version = "2.7.0", source = "pytorch" }
+torchaudio = { version = "2.7.0", source = "pytorch" }
 
+
+[[tool.poetry.source]]
+name = "pytorch"
+url = "https://download.pytorch.org/whl/cu128"
+priority = "explicit"
 
 [build-system]
 requires = ["poetry-core"]
