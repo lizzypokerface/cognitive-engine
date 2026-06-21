@@ -89,7 +89,7 @@ class UniversalExtractorTask(PipelineTask):
 
 
 @register_task("ManualReviewTask")
-class ManualReviewTask(PipelineTask):
+class ManualReviewTask(PipelineTask):  # DEPRECATED: migrated to research-engine
     """
     Human-in-the-Loop (HITL) Review.
     1. Pre-scans all items to identify those with missing fields.
@@ -220,7 +220,7 @@ class ManualReviewTask(PipelineTask):
 
 
 @register_task("SourceGatheringTask")
-class SourceGatheringTask(PipelineTask):
+class SourceGatheringTask(PipelineTask):  # DEPRECATED: migrated to research-engine
 
     """
     Constructs the 'To-Do' list for the research pipeline.
@@ -372,7 +372,7 @@ class SourceGatheringTask(PipelineTask):
 
 
 @register_task("ContentScrapingTask")
-class ContentScrapingTask(PipelineTask):
+class ContentScrapingTask(PipelineTask):  # DEPRECATED: migrated to research-engine
     """
     Source Content Scraper.
     Orchestrates extraction logic based on source type/format.
@@ -525,7 +525,7 @@ class ContentScrapingTask(PipelineTask):
 
 
 @register_task("TitleScrapingTask")
-class TitleScrapingTask(PipelineTask):
+class TitleScrapingTask(PipelineTask):  # DEPRECATED: migrated to research-engine
     """
     Enriches items with titles.
     """

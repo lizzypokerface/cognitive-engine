@@ -13,12 +13,12 @@ import src.tasks.transformers  # noqa: F401
 import src.tasks.aggregators  # noqa: F401
 import src.tasks.writers  # noqa: F401
 import src.tasks.splitters  # noqa: F401
-import src.tasks.extractors  # noqa: F401
+import src.tasks.extractors  # noqa: F401  # DEPRECATED: migrated to research-engine
 import src.tasks.utilities  # noqa: F401
 import src.tasks.notifications  # noqa: F401
-import src.tasks.synthesis  # noqa: F401
-import src.tasks.delivery  # noqa: F401
-import src.tasks.audit  # noqa: F401
+import src.tasks.synthesis  # noqa: F401  # DEPRECATED: migrated to research-engine
+import src.tasks.delivery  # noqa: F401  # DEPRECATED: migrated to research-engine
+import src.tasks.audit  # noqa: F401  # DEPRECATED: migrated to research-engine
 
 logger = logging.getLogger(__name__)
 
