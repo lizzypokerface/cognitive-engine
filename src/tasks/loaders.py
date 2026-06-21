@@ -112,7 +112,7 @@ class DirectoryLoader(PipelineTask):
 
 
 @register_task("SourceCSVLoader")
-class SourceCSVLoader(PipelineTask):
+class SourceCSVLoader(PipelineTask):  # DEPRECATED: migrated to research-engine
     """
     Loads a sources.csv into the Context.
     Schema: id, name, url, type, rank, tags, format

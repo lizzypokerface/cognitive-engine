@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 
 
 @register_task("CloudArchivalTask")
-class CloudArchivalTask(PipelineTask):
+class CloudArchivalTask(PipelineTask):  # DEPRECATED: migrated to research-engine
     """
     Zips the current workspace and uploads it to an S3 bucket.
     """
@@ -66,7 +66,7 @@ class CloudArchivalTask(PipelineTask):
 
 
 @register_task("GitPublisherTask")
-class GitPublisherTask(PipelineTask):
+class GitPublisherTask(PipelineTask):  # DEPRECATED: migrated to research-engine
     """
     Copies the generated report to a local repository, commits, and pushes it.
     """

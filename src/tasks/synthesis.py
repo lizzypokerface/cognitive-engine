@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 
 
 @register_task("StrategicSynthesisTask")
-class StrategicSynthesisTask(PipelineTask):
+class StrategicSynthesisTask(PipelineTask):  # DEPRECATED: migrated to research-engine
     """
     Aggregates all intel and generates:
     1. Global Executive Summary.
@@ -147,7 +147,7 @@ class StrategicSynthesisTask(PipelineTask):
 
 
 @register_task("ReportGenerationTask")
-class ReportGenerationTask(PipelineTask):
+class ReportGenerationTask(PipelineTask):  # DEPRECATED: migrated to research-engine
     """
     Renders the final Markdown report using Jinja2.
     """
@@ -220,7 +220,7 @@ class ReportGenerationTask(PipelineTask):
 
 
 @register_task("ShareSummaryTask")
-class ShareSummaryTask(PipelineTask):
+class ShareSummaryTask(PipelineTask):  # DEPRECATED: migrated to research-engine
     """
     Generates a ~100-word share summary from the Global Executive Summary.
     Stores result as intelligence["Share_Summary"] in the checkpoint.

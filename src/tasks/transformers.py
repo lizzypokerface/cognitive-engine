@@ -373,7 +373,7 @@ class LLMEnrichmentTask(PipelineTask):
 
 
 @register_task("RegionCategorizationTask")
-class RegionCategorizationTask(LLMEnrichmentTask):
+class RegionCategorizationTask(LLMEnrichmentTask):  # DEPRECATED: migrated to research-engine
     """
     Specific implementation for Region Categorization.
     """
@@ -446,7 +446,7 @@ class RegionCategorizationTask(LLMEnrichmentTask):
 
 
 @register_task("SummarizationTask")
-class SummarizationTask(LLMEnrichmentTask):
+class SummarizationTask(LLMEnrichmentTask):  # DEPRECATED: migrated to research-engine
     """
     Specific implementation for Content Summarization.
     """

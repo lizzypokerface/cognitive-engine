@@ -131,7 +131,7 @@ def _build_section_e(combined_sections: str, audit_report_prompt_file: str, conf
 
 
 @register_task("PipelineAuditTask")
-class PipelineAuditTask(PipelineTask):
+class PipelineAuditTask(PipelineTask):  # DEPRECATED: migrated to research-engine
     def execute(self, context: WorkflowContext, config: Dict[str, Any]) -> WorkflowContext:
         checkpoint_file = config.get("checkpoint_file")
         target_key = config.get("target_key", "research_data")
