@@ -1,10 +1,20 @@
-SEARCH_URLS = [
-    "https://www.linkedin.com/jobs/search-results/?keywords=solutions%20engineer&geoId=102454443&distance=0.0",
-    "https://www.linkedin.com/jobs/search-results/?keywords=cloud%20engineer&geoId=102454443&distance=0.0",
+LINKEDIN_SEARCH_BASE = "https://www.linkedin.com/jobs/search-results/?keywords={keywords}&geoId=102454443&distance=0.0"
+
+SEARCH_TERMS = [
+    "cloud engineer",
+    "solutions engineer",
+    "site reliability engineer",
+    "platform engineer",
+    "data engineer",
+    "agentic engineer",
+    "ai engineer",
+    "security engineer",
+    "frontend engineer",
+    "software engineer",
 ]
 
-MAX_JOBS_PER_SEARCH = 10
 OUTPUT_DIR = "output"
 AUTH_FILE = "auth.json"
+RESEARCH_NOTES_FILE = "linkedin_scraper/research_notes.txt"
 
-LLM_CONFIG = {"provider": "poe", "model": "claude-sonnet-4-6"}
+LLM_CONFIG = {"provider": "poe", "model": "gemini-3-flash"}

@@ -1,5 +1,7 @@
 # Project-specific ignores
 outputs/
+output/
+auth.json
 inputs/
 workflows/
 prompts/
