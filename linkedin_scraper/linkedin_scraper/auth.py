@@ -8,10 +8,6 @@ The session is saved to auth.json and loaded automatically by scraper.py.
 """
 
 import asyncio
-import sys
-import os
-
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from linkedin_scraper.config import AUTH_FILE
 from playwright.async_api import async_playwright

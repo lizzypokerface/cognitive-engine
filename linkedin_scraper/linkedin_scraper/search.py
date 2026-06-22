@@ -6,10 +6,7 @@ Opens LinkedIn job search pages for all configured search terms as browser tabs.
 
 import asyncio
 import os
-import sys
 from urllib.parse import quote_plus
-
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from playwright.async_api import async_playwright
 

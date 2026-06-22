@@ -9,8 +9,9 @@ Systematic daily job research for Singapore. Browse configured search terms, tak
 **1. Install dependencies**
 
 ```bash
-poetry install --no-root
-playwright install chromium
+cd linkedin_scraper
+uv sync
+uv run playwright install chromium
 ```
 
 **2. Add your Poe API key to `.env`**
@@ -22,7 +23,7 @@ POE_API_KEY=your_key_here
 **3. Save your LinkedIn session (once only)**
 
 ```bash
-python -m linkedin_scraper.auth
+uv run python -m linkedin_scraper.auth
 ```
 
 A browser opens. Log in to LinkedIn manually, then press Enter. Your session is saved to `auth.json` and reused automatically. Re-run this if scraping stops working (session expires after a few weeks).
@@ -31,17 +32,19 @@ A browser opens. Log in to LinkedIn manually, then press Enter. Your session is 
 
 ## Daily workflow
 
+All commands run from the `linkedin_scraper/` directory.
+
 ### Step 1 — Open searches
 
 ```bash
-python -m linkedin_scraper.search
+uv run python -m linkedin_scraper.search
 ```
 
-Opens all configured search terms as tabs in one browser window and resets `linkedin_scraper/research_notes.txt` with a blank section for each term. Browse the tabs, find interesting roles.
+Opens all configured search terms as tabs in one browser window and resets `research_notes.txt` with a blank section for each term. Browse the tabs, find interesting roles.
 
 ### Step 2 — Add your notes
 
-Open `linkedin_scraper/research_notes.txt`. Each section looks like:
+Open `research_notes.txt`. Each section looks like:
 
 ```
 %%% solutions engineer
@@ -65,7 +68,7 @@ Grab and Sea most active. Heavy Kubernetes/Terraform.
 ### Step 3 — Generate the report
 
 ```bash
-python -m linkedin_scraper.summarise
+uv run python -m linkedin_scraper.summarise
 ```
 
 - Opens a browser, scrapes each job page using your saved session
@@ -114,7 +117,7 @@ OUTPUT_DIR = "output"
 ## Troubleshooting
 
 **Scraping returns "could not load"**
-Your LinkedIn session has expired. Run `python -m linkedin_scraper.auth` to refresh it.
+Your LinkedIn session has expired. Run `uv run python -m linkedin_scraper.auth` to refresh it.
 
 **No content but no auth error either**
 LinkedIn changed their HTML structure. Check `output/debug_last_jd.html` (saved automatically) to inspect what the page actually returned, and update the selectors in `summarise.py`.

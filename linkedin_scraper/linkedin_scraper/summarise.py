@@ -13,8 +13,6 @@ import re
 import sys
 from datetime import date
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -22,7 +20,7 @@ load_dotenv()
 from playwright.async_api import async_playwright
 
 from linkedin_scraper.config import AUTH_FILE, LLM_CONFIG, OUTPUT_DIR, RESEARCH_NOTES_FILE
-from src.core.llm import MockLLMClient, ProductionLLMClient
+from linkedin_scraper.llm import MockLLMClient, ProductionLLMClient
 
 LINKEDIN_JOB_RE = re.compile(r"https://www\.linkedin\.com/jobs/view/(\d+)/[^\s]*")
 

@@ -1,0 +1,15 @@
+[project]
+name = "linkedin-scraper"
+version = "0.1.0"
+description = "LinkedIn job research scraper"
+requires-python = ">=3.11"
+dependencies = [
+    "playwright>=1.40.0",
+    "python-dotenv>=1.0.0",
+    "openai>=1.0.0",
+    "langchain-community>=0.3.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
