@@ -1,7 +1,7 @@
 """
 Run once to save your LinkedIn session.
 
-    python -m linkedin_scraper.auth
+    python -m jobpilot.auth
 
 A browser window will open. Log in to LinkedIn manually, then press Enter here.
 The session is saved to auth.json and loaded automatically by scraper.py.
@@ -9,7 +9,7 @@ The session is saved to auth.json and loaded automatically by scraper.py.
 
 import asyncio
 
-from linkedin_scraper.config import AUTH_FILE
+from jobpilot.config import AUTH_FILE
 from playwright.async_api import async_playwright
 
 

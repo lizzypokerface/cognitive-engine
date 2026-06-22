@@ -1,7 +1,7 @@
 [project]
-name = "linkedin-scraper"
+name = "jobpilot"
 version = "0.1.0"
-description = "LinkedIn job research scraper"
+description = "Job search and application workflow"
 requires-python = ">=3.11"
 dependencies = [
     "playwright>=1.40.0",

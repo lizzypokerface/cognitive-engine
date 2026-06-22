@@ -4,7 +4,7 @@ For each block, LinkedIn job URLs are scraped and summarised individually.
 Any freetext notes in the block are summarised separately.
 Output: output/YYYY-MM-DD-research-summary.md
 
-    python -m linkedin_scraper.summarise
+    python -m jobpilot.summarise
 """
 
 import asyncio
@@ -19,8 +19,8 @@ load_dotenv()
 
 from playwright.async_api import async_playwright
 
-from linkedin_scraper.config import AUTH_FILE, LLM_CONFIG, OUTPUT_DIR, RESEARCH_NOTES_FILE
-from linkedin_scraper.llm import MockLLMClient, ProductionLLMClient
+from jobpilot.config import AUTH_FILE, LLM_CONFIG, OUTPUT_DIR, RESEARCH_NOTES_FILE
+from jobpilot.llm import MockLLMClient, ProductionLLMClient
 
 LINKEDIN_JOB_RE = re.compile(r"https://www\.linkedin\.com/jobs/view/(\d+)/[^\s]*")
 
@@ -105,7 +105,7 @@ async def scrape_jd(page, url: str) -> dict:
     print(f"    page: {page_title[:70]}")
 
     if any(x in current_url for x in ("login", "authwall", "checkpoint")):
-        print("    ⚠ Redirected to auth page — run `python -m linkedin_scraper.auth` to refresh your session")
+        print("    ⚠ Redirected to auth page — run `python -m jobpilot.auth` to refresh your session")
         return {"url": url, "title": "", "content": ""}
 
     for btn_sel in ["button.jobs-description__footer-button", "button.show-more-less-html__button"]:
@@ -156,7 +156,7 @@ async def scrape_jd(page, url: str) -> dict:
         os.makedirs(OUTPUT_DIR, exist_ok=True)
         with open(debug_path, "w", encoding="utf-8") as f:
             f.write(html)
-        print(f"    ⚠ No content found. Debug HTML saved → {debug_path}")
+        print(f"    [!] No content found. Debug HTML saved -> {debug_path}")
 
     return {
         "url": url,
@@ -235,7 +235,7 @@ def main():
 
             f.write("---\n\n")
 
-    print(f"\nDone → {out_path}")
+    print(f"\nDone -> {out_path}")
 
 
 if __name__ == "__main__":

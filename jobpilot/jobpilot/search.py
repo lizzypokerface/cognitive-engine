@@ -1,7 +1,7 @@
 """
 Opens LinkedIn job search pages for all configured search terms as browser tabs.
 
-    python -m linkedin_scraper.search
+    python -m jobpilot.search
 """
 
 import asyncio
@@ -10,14 +10,14 @@ from urllib.parse import quote_plus
 
 from playwright.async_api import async_playwright
 
-from linkedin_scraper.config import AUTH_FILE, LINKEDIN_SEARCH_BASE, RESEARCH_NOTES_FILE, SEARCH_TERMS
+from jobpilot.config import AUTH_FILE, LINKEDIN_SEARCH_BASE, RESEARCH_NOTES_FILE, SEARCH_TERMS
 
 
 def reset_notes():
     with open(RESEARCH_NOTES_FILE, "w", encoding="utf-8") as f:
         for term in SEARCH_TERMS:
             f.write(f"%%% {term}\n\n\n\n")
-    print(f"Research notes reset → {RESEARCH_NOTES_FILE}\n")
+    print(f"Research notes reset -> {RESEARCH_NOTES_FILE}\n")
 
 
 async def run():
