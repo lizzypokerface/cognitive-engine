@@ -17,4 +17,4 @@ OUTPUT_DIR = "output"
 AUTH_FILE = "auth.json"
 RESEARCH_NOTES_FILE = "linkedin_scraper/research_notes.txt"
 
-LLM_CONFIG = {"provider": "poe", "model": "gemini-3-flash"}
+LLM_CONFIG = {"provider": "poe", "model": "gemini-3.1-flash-lite"}
